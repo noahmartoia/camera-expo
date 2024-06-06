@@ -6,6 +6,8 @@ export default function App() {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [torch, setTorche] = useState(false);
+  const [codeRead, setReader] = useState(false);
+  const [scan, setScan] = useState(false);
 
   if (!permission) {
     // Camera permissions are still loading.
@@ -28,10 +30,14 @@ export default function App() {
   function toggleTorche() {
     setTorche(current => (current ===  false ? true : false));
   }
+  function onScan(code) {
+    console.log(code.data)
+    setScan(true)
+  }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} enableTorch={torch}>
+      <CameraView style={styles.camera} facing={facing} enableTorch={torch} onBarcodeScanned={(code)=>onScan(code)}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <Text style={styles.text}>Flip Camera</Text>
@@ -82,7 +88,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   rond:{
-    borderRadius: 1 ,
+    borderRadius: 50 ,
     borderWidth: 35,
     borderColor: 'white',
   }
